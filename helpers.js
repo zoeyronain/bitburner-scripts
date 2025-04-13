@@ -845,9 +845,13 @@ export function unEscapeArrayArgs(args) {
  * @param {NS} ns The nestcript instance passed to your script's main entry point
  * @param {number|undefined} processId The id of the process to tail, or null to use the current process id
  */
-export function tail(ns, processId = undefined) {
+export function tail(ns, processId = undefined, close = false) {
     checkNsInstance(ns, '"tail"');
     processId ??= ns.pid
+    if (close){
+    ns.ui.closeTail(processId);
+    return;
+    }
     ns.ui.openTail(processId);
     // Don't move or resize tail windows that were previously opened and possibly moved by the player
     const tailFile = '/Temp/helpers-tailed-pids.txt'; // Use a file so it can be wiped on reset
